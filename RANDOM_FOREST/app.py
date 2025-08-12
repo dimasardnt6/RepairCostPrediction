@@ -3,10 +3,20 @@ import pandas as pd
 import joblib
 import numpy as np
 import plotly.graph_objects as go
+import os
 
-# === Load model dan encoder ===
-model = joblib.load("model_rf.pkl")
-le = joblib.load("label_encoder.pkl")
+# === Tentukan path absolut file model & encoder ===
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+model_path = os.path.join(BASE_DIR, "model_rf.pkl")
+encoder_path = os.path.join(BASE_DIR, "label_encoder.pkl")
+
+# === Load model dan encoder dengan pengecekan ===
+if not os.path.exists(model_path) or not os.path.exists(encoder_path):
+    st.error("❌ File model atau encoder tidak ditemukan. Pastikan `model_rf.pkl` dan `label_encoder.pkl` ada di folder yang sama dengan `app.py`.")
+    st.stop()
+
+model = joblib.load(model_path)
+le = joblib.load(encoder_path)
 
 st.title("📈 Prediksi Biaya Perbaikan Armada - Bulanan")
 
